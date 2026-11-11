@@ -71,7 +71,7 @@
       '';
     };
 
-    runShell = [(self.lib.vjenv.env pkgs)];
+    #runShell = [(self.lib.vjenv.env pkgs)];
   };
 
   wrappers.jjui = {

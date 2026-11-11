@@ -7,6 +7,6 @@
     imports = [wlib.modules.default];
     package = pkgs.git;
 
-    runShell = [(self.lib.vjenv.env pkgs)];
+    #runShell = [(self.lib.vjenv.env pkgs)];
   };
 }

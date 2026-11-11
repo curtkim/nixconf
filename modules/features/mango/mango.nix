@@ -12,25 +12,12 @@
   }: let
     exeOf = self.lib.dynamicExe config.dynamicMode;
 
-    vjshellExe = exeOf pkgs.vj.vjshell;
-    vjprojExe = exeOf pkgs.vj.vjproj;
-
-    resolve = self.lib.keymap.resolve {
-      inherit pkgs;
-      vjshell = vjshellExe;
-    };
-
     mod = "SUPER";
 
     mmsgExe =
       if config.dynamicMode
       then "/run/current-system/sw/bin/mmsg"
       else "${pkgs.mangowc}/bin/mmsg";
-
-    projectTerminal = pkgs.writeShellScript "vjproj-terminal" ''
-      cd "$(${vjprojExe} dir)" 2>/dev/null || cd "$HOME"
-      exec ${config.terminal} "$@"
-    '';
 
     wsKeys =
       lib.zipListsWith (key: ws: {inherit key ws;})
@@ -69,14 +56,8 @@
           ${pkgs.systemd}/bin/systemctl --user import-environment ${sessionVars}
           ${pkgs.dbus}/bin/dbus-update-activation-environment --systemd ${sessionVars}
           ${pkgs.systemd}/bin/systemctl --user start nixos-fake-graphical-session.target
-          ${pkgs.systemd}/bin/systemctl --user restart vjproj-serve.service
-          ${
-          if config.dynamicMode
-          then "${pkgs.systemd}/bin/systemctl --user restart vjshell.service"
-          else "${vjshellExe} &"
         }
         else
-          ${vjshellExe} &
         fi
 
         ${pkgs.swaybg}/bin/swaybg -i ${self.lib.wallpaper} -m fill &
@@ -220,24 +201,10 @@
         ];
 
         bind = let
-          viewBinds = map (e: "${mod},${e.key},spawn,${vjprojExe} view ${toString e.ws}") wsKeys;
-          tagBinds = map (e: "${mod}+SHIFT,${e.key},spawn,${vjprojExe} tag ${toString e.ws}") wsKeys;
-          switchBinds = map (n: "${mod}+CTRL,${toString n},spawn,${vjprojExe} switch --position ${toString n}") (lib.range 1 9);
-          sendBinds = map (n: "${mod}+CTRL+SHIFT,${toString n},spawn,${vjprojExe} send --position ${toString n}") (lib.range 1 9);
 
-          declaredBinds =
-            lib.mapAttrsToList
-            (chord: e: "${chord},spawn,${resolve e.cmd}")
-            self.keymap.binds;
         in
-          viewBinds
-          ++ tagBinds
-          ++ switchBinds
-          ++ sendBinds
-          ++ declaredBinds
-          ++ [
-            "${mod},space,spawn,${vjshellExe} ipc call launcher toggle"
-            "${mod},Return,spawn,${projectTerminal}"
+          [
+            "${mod},Return,spawn,${config.terminal}"
 
             "${mod},m,quit"
             "${mod},q,killclient"
@@ -286,42 +253,12 @@
 
             "SUPER,n,switch_layout"
 
-            "CTRL,Left,spawn,${vjprojExe} left --occupied"
-            "CTRL,Right,spawn,${vjprojExe} right --occupied"
-
             "${mod}+CTRL,S,spawn,${exeOf pkgs.vj.screenshot}"
             "${mod}+SHIFT,S,spawn,${exeOf pkgs.vj.screenshotRegion}"
             "${mod}+SHIFT,E,spawn,${exeOf pkgs.vj.pipeSwappy}"
 
-            "${mod},S,spawn,${vjshellExe} ipc call launcher toggle"
 
-            "${mod},y,spawn,${vjshellExe} ipc call musicLyricsService toggle"
-
-            "${mod},d,spawn,${vjshellExe} ipc call menu toggle"
-
-            "${mod},Tab,spawn,${vjprojExe} next"
-            "${mod},e,spawn,${vjprojExe} fresh"
-            "${mod},a,spawn,${vjshellExe} ipc call projects toggle"
-            "${mod}+SHIFT,a,spawn,${vjshellExe} ipc call projects edit"
             "${mod}+SHIFT,r,spawn,${mmsgExe} dispatch reload_config"
-            "${mod}+SHIFT,F1,spawn,${vjprojExe} reset"
-          ];
-
-        mousebind = let
-          declaredMouse =
-            lib.mapAttrsToList
-            (chord: e: "${chord},spawn,${resolve e.cmd}")
-            self.keymap.mouse;
-        in
-          declaredMouse
-          ++ [
-            "SUPER,btn_left,moveresize,curmove"
-            "SUPER,btn_right,moveresize,curresize"
-
-            "SUPER,btn_side,spawn,${vjprojExe} view ${toString (wsFor "9")}"
-            "SUPER,btn_back,spawn,${vjprojExe} view ${toString (wsFor "9")}"
-            "SUPER,btn_extra,spawn,${vjprojExe} view ${toString (wsFor "0")}"
-            "SUPER,btn_forward,spawn,${vjprojExe} view ${toString (wsFor "0")}"
           ];
 
         axisbind = [
