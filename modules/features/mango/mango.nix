@@ -201,65 +201,62 @@
         ];
 
         bind = let
+        in [
+          "${mod},Return,spawn,${config.terminal}"
 
-        in
-          [
-            "${mod},Return,spawn,${config.terminal}"
+          "${mod},m,quit"
+          "${mod},q,killclient"
 
-            "${mod},m,quit"
-            "${mod},q,killclient"
+          "${mod},h,focusdir,left"
+          "${mod},l,focusdir,right"
+          "${mod},k,focusdir,up"
+          "${mod},j,focusdir,down"
 
-            "${mod},h,focusdir,left"
-            "${mod},l,focusdir,right"
-            "${mod},k,focusdir,up"
-            "${mod},j,focusdir,down"
+          "${mod},Left,focusdir,left"
+          "${mod},Right,focusdir,right"
+          "${mod},Up,focusdir,up"
+          "${mod},Down,focusdir,down"
 
-            "${mod},Left,focusdir,left"
-            "${mod},Right,focusdir,right"
-            "${mod},Up,focusdir,up"
-            "${mod},Down,focusdir,down"
+          "${mod}+SHIFT,Up,exchange_client,up"
+          "${mod}+SHIFT,Down,exchange_client,down"
+          "${mod}+SHIFT,Left,exchange_client,left"
+          "${mod}+SHIFT,Right,exchange_client,right"
+          "${mod}+SHIFT,k,exchange_client,up"
+          "${mod}+SHIFT,j,exchange_client,down"
+          "${mod}+SHIFT,h,exchange_client,left"
+          "${mod}+SHIFT,l,exchange_client,right"
 
-            "${mod}+SHIFT,Up,exchange_client,up"
-            "${mod}+SHIFT,Down,exchange_client,down"
-            "${mod}+SHIFT,Left,exchange_client,left"
-            "${mod}+SHIFT,Right,exchange_client,right"
-            "${mod}+SHIFT,k,exchange_client,up"
-            "${mod}+SHIFT,j,exchange_client,down"
-            "${mod}+SHIFT,h,exchange_client,left"
-            "${mod}+SHIFT,l,exchange_client,right"
+          "${mod}+CTRL,h,resizewin,-50,+0"
+          "${mod}+CTRL,l,resizewin,+50,+0"
+          "${mod}+CTRL,k,resizewin,+0,-50"
+          "${mod}+CTRL,j,resizewin,+0,+50"
 
-            "${mod}+CTRL,h,resizewin,-50,+0"
-            "${mod}+CTRL,l,resizewin,+50,+0"
-            "${mod}+CTRL,k,resizewin,+0,-50"
-            "${mod}+CTRL,j,resizewin,+0,+50"
+          "${mod}+CTRL,Left,resizewin,-50,+0"
+          "${mod}+CTRL,Right,resizewin,+50,+0"
+          "${mod}+CTRL,Up,resizewin,+0,-50"
+          "${mod}+CTRL,Down,resizewin,+0,+50"
 
-            "${mod}+CTRL,Left,resizewin,-50,+0"
-            "${mod}+CTRL,Right,resizewin,+50,+0"
-            "${mod}+CTRL,Up,resizewin,+0,-50"
-            "${mod}+CTRL,Down,resizewin,+0,+50"
+          "${mod},t,toggleglobal"
+          "ALT,Tab,overcircle,next"
+          "${mod},f,togglemaximizescreen"
+          "${mod}+shift,f,togglefloating"
+          "${mod},g,togglefullscreen"
+          "SUPER,i,minimized"
+          "SUPER,o,toggleoverlay"
+          "SUPER+SHIFT,I,restore_minimized"
+          "ALT,z,toggle_scratchpad"
 
-            "${mod},t,toggleglobal"
-            "ALT,Tab,overcircle,next"
-            "${mod},f,togglemaximizescreen"
-            "${mod}+shift,f,togglefloating"
-            "${mod},g,togglefullscreen"
-            "SUPER,i,minimized"
-            "SUPER,o,toggleoverlay"
-            "SUPER+SHIFT,I,restore_minimized"
-            "ALT,z,toggle_scratchpad"
+          "ALT,e,set_proportion,1.0"
+          "ALT,x,switch_proportion_preset"
 
-            "ALT,e,set_proportion,1.0"
-            "ALT,x,switch_proportion_preset"
+          "SUPER,n,switch_layout"
 
-            "SUPER,n,switch_layout"
+          "${mod}+CTRL,S,spawn,${exeOf pkgs.vj.screenshot}"
+          "${mod}+SHIFT,S,spawn,${exeOf pkgs.vj.screenshotRegion}"
+          "${mod}+SHIFT,E,spawn,${exeOf pkgs.vj.pipeSwappy}"
 
-            "${mod}+CTRL,S,spawn,${exeOf pkgs.vj.screenshot}"
-            "${mod}+SHIFT,S,spawn,${exeOf pkgs.vj.screenshotRegion}"
-            "${mod}+SHIFT,E,spawn,${exeOf pkgs.vj.pipeSwappy}"
-
-
-            "${mod}+SHIFT,r,spawn,${mmsgExe} dispatch reload_config"
-          ];
+          "${mod}+SHIFT,r,spawn,${mmsgExe} dispatch reload_config"
+        ];
 
         axisbind = [
           "SUPER,UP,spawn,${exeOf pkgs.vj.volYtMusic} up"

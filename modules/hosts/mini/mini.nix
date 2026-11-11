@@ -3,9 +3,7 @@
     imports = [
       self.modules.nixos.base
       self.modules.nixos.desktop
-      self.modules.nixos.personal
 
-      self.modules.nixos.gaming
       self.modules.nixos.powersave
     ];
 
